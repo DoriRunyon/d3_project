@@ -1,4 +1,4 @@
-"""Models and database functions for spotify discovery project."""
+"""Models and database functions for Discover Playlist Project."""
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -46,10 +46,10 @@ class User_Track(db.Model):
 
     user_track_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    track_id = db.Column(db.Integer, db.ForeignKey('track.track_id'), nullable=False)
+    track_id = db.Column(db.Integer, db.ForeignKey('tracks.track_id'), nullable=False)
 
 
-def connect_to_db(app, db_uri="postgresql:///noodledb"):
+def connect_to_db(app, db_uri="postgresql://localhost/spotify_d3_project"):
     """Connect the database to our Flask app."""
 
     # Configure to use postgres database

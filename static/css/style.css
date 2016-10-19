@@ -22,3 +22,9 @@
     font-family: sans-serif;
     font-size: 11px;
 }
+
+.loginbutton {
+
+    margin: 20px;
+    color: red;
+}

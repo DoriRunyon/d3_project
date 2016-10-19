@@ -12,8 +12,8 @@ from jinja2 import StrictUndefined
 from model import connect_to_db, db
 
 # Other External Libraries
-import spotipy
-spotify = spotipy.Spotify()
+import spotipy, pprint, requests
+# spotify = spotipy.Spotify()
 
 # Setting up Flask app
 app = Flask(__name__)
@@ -25,12 +25,24 @@ app.secret_key = os.environ['APP_SECRET']
 spotify_consumer_key = os.environ['SPOTIFY_CONSUMER_KEY']
 spotify_consumer_secret = os.environ['SPOTIFY_CONSUMER_SECRET']
 
-
 # App Routes
 
+
 @app.route('/')
+def login():
+    """"""
+
+    return render_template("login.html")
+
+
+@app.route('/index')
 def index():
     """"""
+
+    artist = 'https://api.spotify.com/v1/artists/0OdUWJ0sBjDrqHygGUXeCF'
+    artist_request = requests.get(artist)
+
+    print artist_request.json()
 
     return render_template("index.html")
 
