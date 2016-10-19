@@ -2,6 +2,7 @@
 
 # Standard Python Libraries
 import os
+import requests
 
 # Flask
 from flask import Flask, render_template, redirect, request, flash, session
@@ -13,7 +14,9 @@ from model import connect_to_db, db
 
 # Other External Libraries
 import spotipy, pprint, requests
-# spotify = spotipy.Spotify()
+import spotipy.util as util
+import webbrowser
+spotify = spotipy.Spotify()
 
 # Setting up Flask app
 app = Flask(__name__)
@@ -35,14 +38,21 @@ def login():
     return render_template("login.html")
 
 
+@app.route('/spotify_oauth')
+def spotify_oauth():
+    """"""
+
+    redirect_uri = 'http://localhost:5000/index'
+
+    #should add state at some point
+
+    oauth = "https://accounts.spotify.com/authorize/?client_id={0}&response_type=code&redirect_uri={1}&scope=user-read-email".format(spotify_consumer_key, redirect_uri)
+
+    return redirect(oauth, code=302)
+
 @app.route('/index')
 def index():
     """"""
-
-    artist = 'https://api.spotify.com/v1/artists/0OdUWJ0sBjDrqHygGUXeCF'
-    artist_request = requests.get(artist)
-
-    print artist_request.json()
 
     return render_template("index.html")
 
