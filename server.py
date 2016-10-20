@@ -56,12 +56,15 @@ def index():
     """"""
 
     authorization_code = request.args['code']
-
     payload = {'grant_type': 'authorization_code', 'code': authorization_code, 'redirect_uri': REDIRECT_URI, 'client_id': spotify_consumer_key, 'client_secret': spotify_consumer_secret}
-
     r = requests.post("https://accounts.spotify.com/api/token", data=payload)
+    access_token = r.json()['access_token']
 
-    print "did this work??", r.json()
+
+    headers = {"Authorization": "Bearer " + access_token}
+    x = requests.get("https://api.spotify.com/v1/me", headers=headers)
+    email = x.json()['email']
+    print email
 
     return render_template("index.html")
 
