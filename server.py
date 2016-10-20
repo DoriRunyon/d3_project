@@ -5,7 +5,7 @@ import os
 import requests
 
 # Flask
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, Response
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 
@@ -28,6 +28,9 @@ app.secret_key = os.environ['APP_SECRET']
 spotify_consumer_key = os.environ['SPOTIFY_CONSUMER_KEY']
 spotify_consumer_secret = os.environ['SPOTIFY_CONSUMER_SECRET']
 
+#global variables
+REDIRECT_URI = 'http://localhost:5000/index'
+
 # App Routes
 
 
@@ -42,17 +45,23 @@ def login():
 def spotify_oauth():
     """"""
 
-    redirect_uri = 'http://localhost:5000/index'
-
     #should add state at some point
 
-    oauth = "https://accounts.spotify.com/authorize/?client_id={0}&response_type=code&redirect_uri={1}&scope=user-read-email".format(spotify_consumer_key, redirect_uri)
+    oauth = "https://accounts.spotify.com/authorize/?client_id={0}&response_type=code&redirect_uri={1}&scope=user-read-email".format(spotify_consumer_key, REDIRECT_URI)
 
     return redirect(oauth, code=302)
 
 @app.route('/index')
 def index():
     """"""
+
+    authorization_code = request.args['code']
+
+    payload = {'grant_type': 'authorization_code', 'code': authorization_code, 'redirect_uri': REDIRECT_URI, 'client_id': spotify_consumer_key, 'client_secret': spotify_consumer_secret}
+
+    r = requests.post("https://accounts.spotify.com/api/token", data=payload)
+
+    print "did this work??", r.json()
 
     return render_template("index.html")
 
